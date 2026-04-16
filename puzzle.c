@@ -4,6 +4,37 @@
 
 #define M 3
 
+int hamleYap(int oyun[M][M], int *bosSatir, int *bosSutun, int secilenSatir, int secilenSutun) {
+
+    if (secilenSatir < 0 || secilenSatir >= M || secilenSutun < 0 || secilenSutun >= M) {
+        printf("Gecersiz koordinat!\n");
+        return 0;
+    }
+
+    // Seçilen yer ile boşluk arasındaki farkı buluyoruz
+    int satirFarki = secilenSatir - *bosSatir;
+    int sutunFarki = secilenSutun - *bosSutun;
+
+    
+    
+    if ((satirFarki == 0 && (sutunFarki == 1 || sutunFarki == -1)) ||
+        (sutunFarki == 0 && (satirFarki == 1 || satirFarki == -1))) {
+        
+        
+        oyun[*bosSatir][*bosSutun] = oyun[secilenSatir][secilenSutun];
+        oyun[secilenSatir][secilenSutun] = 0;
+
+        
+        *bosSatir = secilenSatir;
+        *bosSutun = secilenSutun;
+
+        return 1;
+    } 
+
+    printf("Gecersiz hamle!\n");
+    return 0; 
+}
+
 int main() {
     int oyun[M][M], i, j;
     int bosSatir = 2, bosSutun = 2;
@@ -50,6 +81,29 @@ int main() {
             }
         }
         printf("\n");
+    }
+
+    int secilenS, secilenK;
+    
+    while (1) {
+        printf("\nKaydirmak istediginiz tasin satir ve sutununu girin (Ornek: 1 2): ");
+        scanf("%d %d", &secilenS, &secilenK);
+
+        if (hamleYap(oyun, &bosSatir, &bosSutun, secilenS, secilenK)) {
+            printf("\n--- Yeni Durum ---\n");
+            printf("   0  1  2\n");
+            for (i = 0; i < M; i++) {
+                printf("%d ", i);
+                for (j = 0; j < M; j++) {
+                    if (oyun[i][j] == 0) {
+                        printf("[ ]");
+                    } else {
+                        printf("[%d]", oyun[i][j]);
+                    }
+                }
+                printf("\n");
+            }
+        }
     }
 
     return 0;
