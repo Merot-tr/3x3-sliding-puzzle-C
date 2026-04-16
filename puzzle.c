@@ -11,20 +11,20 @@ int hamleYap(int oyun[M][M], int *bosSatir, int *bosSutun, int secilenSatir, int
         return 0;
     }
 
-    // Seçilen yer ile boşluk arasındaki farkı buluyoruz
+    if (oyun[secilenSatir][secilenSutun] == 0) {
+        printf("Bos hucre secilemez!\n");
+        return 0;
+    }
+
     int satirFarki = secilenSatir - *bosSatir;
     int sutunFarki = secilenSutun - *bosSutun;
 
-    
-    
     if ((satirFarki == 0 && (sutunFarki == 1 || sutunFarki == -1)) ||
         (sutunFarki == 0 && (satirFarki == 1 || satirFarki == -1))) {
-        
         
         oyun[*bosSatir][*bosSutun] = oyun[secilenSatir][secilenSutun];
         oyun[secilenSatir][secilenSutun] = 0;
 
-        
         *bosSatir = secilenSatir;
         *bosSutun = secilenSutun;
 
@@ -87,7 +87,12 @@ int main() {
     
     while (1) {
         printf("\nKaydirmak istediginiz tasin satir ve sutununu girin (Ornek: 1 2): ");
-        scanf("%d %d", &secilenS, &secilenK);
+
+        if (scanf("%d %d", &secilenS, &secilenK) != 2) {
+            printf("Hatali giris!\n");
+            while(getchar() != '\n');
+            continue;
+        }
 
         if (hamleYap(oyun, &bosSatir, &bosSutun, secilenS, secilenK)) {
             printf("\n--- Yeni Durum ---\n");
