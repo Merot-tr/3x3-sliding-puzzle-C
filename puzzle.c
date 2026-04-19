@@ -11,7 +11,6 @@ int hamleYap(int oyun[M][M], int *bosSatir, int *bosSutun, int secilenSatir, int
         return 0;
     }
 
-    // Seçilen yer ile boşluk arasındaki farkı buluyoruz
     int satirFarki = secilenSatir - *bosSatir;
     int sutunFarki = secilenSutun - *bosSutun;
 
@@ -34,12 +33,24 @@ int hamleYap(int oyun[M][M], int *bosSatir, int *bosSutun, int secilenSatir, int
     printf("Gecersiz hamle!\n");
     return 0; 
 }
-
+int kontrol(int dizi[][M], int *durum) {
+    int sayac = 1;
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < M; j++) {
+            if (dizi[i][j] != sayac++ && !(i == M - 1 && j == M - 1)) {
+                return 0;
+            }
+        }
+    }
+    *durum = 0;
+    return 1;
+}
 int main() {
     int oyun[M][M], i, j;
     int bosSatir = 2, bosSutun = 2;
     srand(time(NULL));
-
+   
+    int durum = 1;
     int sayac = 1;
     for (i = 0; i < M; i++) {
         for (j = 0; j < M; j++) {
@@ -84,12 +95,14 @@ int main() {
     }
 
     int secilenS, secilenK;
-    
-    while (1) {
+    int hamle=0;
+    while (durum) {
         printf("\nKaydirmak istediginiz tasin satir ve sutununu girin (Ornek: 1 2): ");
         scanf("%d %d", &secilenS, &secilenK);
 
         if (hamleYap(oyun, &bosSatir, &bosSutun, secilenS, secilenK)) {
+            hamle++;
+            printf("Hamle sayisi: %d\n", hamle);
             printf("\n--- Yeni Durum ---\n");
             printf("   0  1  2\n");
             for (i = 0; i < M; i++) {
@@ -102,9 +115,11 @@ int main() {
                     }
                 }
                 printf("\n");
+              
             }
         }
+          kontrol(oyun, &durum);
     }
-
+     printf("Tebrikler! Oyunu kazandiniz!\n");
     return 0;
 }
